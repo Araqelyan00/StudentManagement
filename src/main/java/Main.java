@@ -1,4 +1,5 @@
 import command.Commands;
+import exception.LessonNotFoundException;
 import model.Lesson;
 import model.Student;
 import model.User;
@@ -9,14 +10,15 @@ import storage.UserStorage;
 
 import java.util.Date;
 import java.util.Scanner;
+
 import static util.DateUtil.stringToDate;
 
 public class Main implements Commands {
 
-    private static Scanner sc = new Scanner(System.in);
-    private static LessonStorage lessonStorage = new LessonStorage();
-    private static StudentStorage studentStorage = new StudentStorage();
-    private static UserStorage userStorage = new UserStorage();
+    private static final Scanner sc = new Scanner(System.in);
+    private static final LessonStorage lessonStorage = new LessonStorage();
+    private static final StudentStorage studentStorage = new StudentStorage();
+    private static final UserStorage userStorage = new UserStorage();
     private static User currentUser = null;
 
     public static void main(String[] args) {
@@ -47,8 +49,8 @@ public class Main implements Commands {
     }
 
     private static void initData() {
-        User admin = new User("Admin", "Adminyan" , "Admin@gmail.com", "admin", UserType.ADMIN);
-        User user = new User("User", "Useryan" , "User@gmail.com", "user", UserType.USER);
+        User admin = new User("Admin", "Adminyan", "Admin@gmail.com", "admin", UserType.ADMIN);
+        User user = new User("User", "Useryan", "User@gmail.com", "user", UserType.USER);
         userStorage.add(admin);
         userStorage.add(user);
         Lesson java = new Lesson("Java", "Asatur", 90, 50.0, stringToDate("07/08/2024"));
@@ -57,20 +59,20 @@ public class Main implements Commands {
         studentStorage.add(new Student("Saqo", "Sargsyan", 27, "099887766", "Erevan", java, admin, new Date()));
     }
 
-    private static void login(){
+    private static void login() {
         System.out.print("Please enter your email :");
         String email = sc.nextLine().trim();
         User user = userStorage.getUserByEmail(email);
         if (user == null) {
             System.out.println("Invalid email !");
-        }else {
-        System.out.print("Please enter your email :");
-        String password = sc.nextLine().trim();
+        } else {
+            System.out.print("Please enter password :");
+            String password = sc.nextLine().trim();
             if (user.getPassword().equals(password)) {
                 currentUser = user;
-                if (user.getUserType() == UserType.ADMIN){
+                if (user.getUserType() == UserType.ADMIN) {
                     loginAdmin();
-                } else if (user.getUserType() == UserType.USER){
+                } else if (user.getUserType() == UserType.USER) {
                     loginUser();
                 }
             } else {
@@ -79,33 +81,33 @@ public class Main implements Commands {
         }
     }
 
-    private static void register(){
+    private static void register() {
         System.out.print("Please enter your name :");
         String name = sc.nextLine().trim();
         System.out.print("Please enter your surname :");
         String surname = sc.nextLine().trim();
         System.out.print("Please enter your email :");
         String email = sc.nextLine().trim();
-        if (userStorage.getUserByEmail(email) != null){
+        if (userStorage.getUserByEmail(email) != null) {
             System.out.println("User already exists !");
         } else {
-        System.out.print("Please enter your password :");
-        String password = sc.nextLine().trim();
-        System.out.print("Please enter your user type (0:User or 1:Admin) :");
-        int userType;
-        try {
-            userType = Integer.parseInt(sc.nextLine());
-        } catch (NumberFormatException e) {
-            userType = -1;
-        }
+            System.out.print("Please enter your password :");
+            String password = sc.nextLine().trim();
+            System.out.print("Please enter your user type (0:User or 1:Admin) :");
+            int userType;
+            try {
+                userType = Integer.parseInt(sc.nextLine());
+            } catch (NumberFormatException e) {
+                userType = -1;
+            }
             User user = new User();
             user.setName(name);
             user.setSurname(surname);
             user.setEmail(email);
             user.setPassword(password);
-            if (userType == 0){
+            if (userType == 0) {
                 user.setUserType(UserType.USER);
-            } else if (userType == 1){
+            } else if (userType == 1) {
                 user.setUserType(UserType.ADMIN);
             } else {
                 System.out.println("Invalid user type !");
@@ -115,7 +117,7 @@ public class Main implements Commands {
         }
     }
 
-    private static void loginAdmin(){
+    private static void loginAdmin() {
         boolean run = true;
         while (run) {
             Commands.printAdminCommands();
@@ -145,7 +147,7 @@ public class Main implements Commands {
                     printAllLessons();
                     break;
                 case DELETE_STUDENT_BY_INDEX:
-                    deleteByIndex();
+                    deleteStudentByIndex();
                     break;
                 case CHANGE_STUDENT_LESSON:
                     changeStudentsLesson();
@@ -158,7 +160,7 @@ public class Main implements Commands {
         }
     }
 
-    private static void loginUser(){
+    private static void loginUser() {
         boolean run = true;
         while (run) {
             Commands.printUserCommands();
@@ -191,7 +193,7 @@ public class Main implements Commands {
         }
     }
 
-    private static void createAndAddNewStudent(){
+    private static void createAndAddNewStudent() {
         System.out.print("Please enter student's name :");
         String name = sc.nextLine().trim();
         System.out.print("Please enter student's surname :");
@@ -203,7 +205,122 @@ public class Main implements Commands {
         System.out.print("Please enter student's city :");
         String city = sc.nextLine().trim();
         System.out.print("Please enter student's lesson :");
-        String lesson = sc.nextLine().trim();
+        String lessonName = sc.nextLine().trim();
+        if (lessonStorage.getLessonByName(lessonName) == null) {
+            System.out.println("Lesson with " + lessonName + " doesn't exists !");
+        } else {
+            Lesson lesson = lessonStorage.getLessonByName(lessonName);
+
+            Student student = new Student();
+
+            student.setName(name);
+            student.setSurname(surname);
+            student.setAge(age);
+            student.setPhoneNumber(phone);
+            student.setCity(city);
+            student.setLesson(lesson);
+            student.setRegisteredUser(currentUser);
+            student.setRegisterDate(new Date());
+
+            studentStorage.add(student);
+
+            System.out.println("Student successfully created!");
+        }
+    }
+
+    private static void printAllStudents() {
+        studentStorage.print();
+    }
+
+    private static void printStudentsByLesson() {
+        System.out.print("Please enter lesson name :");
+        String lessonName = sc.nextLine().trim();
+        if (lessonStorage.getLessonByName(lessonName) == null) {
+            System.out.println("Lesson with " + lessonName + " doesn't exists !");
+        } else {
+
+            studentStorage.printStudentsByLesson(lessonStorage.getLessonByName(lessonName));
+        }
+    }
+
+    private static void printStudentsCount() {
+        System.out.println("We have " + studentStorage.getSize() + " students in the database.");
+    }
+
+    private static void printAllLessons() {
+        lessonStorage.print();
+    }
+
+    private static void deleteStudentByIndex() {
+        System.out.println("Students list :");
+        printAllStudents();
+        System.out.print("Please enter student's index :");
+        int studentIndex;
+        try {
+            studentIndex = Integer.parseInt(sc.nextLine().trim());
+        } catch (NumberFormatException e) {
+            studentIndex = -1;
+        }
+        if (studentStorage.getStudentByIndex(studentIndex) == null) {
+            System.out.println("Student doesn't exists !");
+        } else {
+            studentStorage.deleteByIndex(studentIndex);
+            System.out.println("Student successfully deleted!");
+        }
+    }
+
+    private static void changeStudentsLesson() {
+        System.out.println("Students list :");
+        printAllStudents();
+        System.out.print("Please enter student's index :");
+        int studentIndex;
+        try {
+            studentIndex = Integer.parseInt(sc.nextLine().trim());
+        } catch (NumberFormatException e) {
+            studentIndex = -1;
+        }
+        if (studentStorage.getStudentByIndex(studentIndex) == null) {
+            System.out.println("Student doesn't exists !");
+        } else {
+            System.out.println("Lessons list :");
+            lessonStorage.print();
+            System.out.println("Please enter lesson index :");
+            int lessonIndex;
+            try {
+                lessonIndex = Integer.parseInt(sc.nextLine().trim());
+            } catch (NumberFormatException e) {
+                lessonIndex = -1;
+            }
+            try {
+                if (lessonStorage.getLessonByIndex(lessonIndex) == null) {
+                    System.out.println("Lesson doesn't exists !");
+                } else {
+                    studentStorage.getStudentByIndex(studentIndex).setLesson(lessonStorage.getLessonByIndex(lessonIndex));
+                    System.out.println("Lesson successfully changed!");
+                }
+            } catch (LessonNotFoundException e) {
+                System.out.println("Lesson does not exists !");
+            }
+        }
+    }
+
+    private static void addLesson(){
+        System.out.print("Please enter lesson's name :");
+        String lessonName = sc.nextLine().trim();
+        if (lessonStorage.getLessonByName(lessonName) != null) {
+            System.out.println("Lesson already exists !");
+        } else {
+            System.out.print("Please enter teacher's name :");
+            String teacherName = sc.nextLine().trim();
+            System.out.print("Please enter duration in minutes :");
+            int durationInMinutes = Integer.parseInt(sc.nextLine().trim());
+            System.out.println("Please enter lesson's price :");
+            double lessonPrice = Double.parseDouble(sc.nextLine().trim());
+            System.out.println("Please enter lesson's start date(dd/MM/yyyy) :");
+            String startDateStr = sc.nextLine().trim();
+            lessonStorage.add(new Lesson(lessonName, teacherName, durationInMinutes, lessonPrice, stringToDate(startDateStr)));
+            System.out.println("Lesson successfully added!");
+        }
     }
 
 

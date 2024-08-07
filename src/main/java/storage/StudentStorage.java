@@ -3,6 +3,7 @@ package storage;
 
 import lombok.Getter;
 
+import model.Lesson;
 import model.Student;
 
 public class StudentStorage {
@@ -21,7 +22,7 @@ public class StudentStorage {
 
     public void print(){
         for (int i = 0; i < size; i++) {
-            System.out.println(i + ". " + array[i]);
+            System.out.println("Index " + i + ". " + array[i]);
         }
     }
 
@@ -49,7 +50,7 @@ public class StudentStorage {
         return array[index];
     }
 
-    public void printStudentsByLesson(String lessonName){
+    public void printStudentsByLesson(Lesson lessonName){
         for (int i = 0 ; i < size; i++) {
             if (array[i].getLesson().equals(lessonName)) {
                 System.out.println(array[i]);

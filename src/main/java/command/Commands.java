@@ -27,7 +27,7 @@ public interface Commands {
         System.out.println("Please input " + CHANGE_STUDENT_LESSON + " to change student's lesson.");
         System.out.println("Please input " + DELETE_STUDENT_BY_INDEX + " to delete a Student by index.");
         System.out.println("Please input " + ADD_LESSON + " to add a lesson.");
-        System.out.println("Please input your choice here : ");
+        System.out.print("Please input your choice here : ");
     }
 
     static void printUserCommands(){
@@ -37,13 +37,14 @@ public interface Commands {
         System.out.println("Please input " + PRINT_STUDENTS_BY_LESSON + " to print students by lesson.");
         System.out.println("Please input " + PRINT_STUDENTS_COUNT + " to print students count.");
         System.out.println("Please input " + PRINT_ALL_LESSONS + " to print all lessons.");
-        System.out.println("Please input your choice here : ");
+        System.out.print("Please input your choice here : ");
     }
 
     static void printLoginCommands(){
         System.out.println("Please input " + EXIT + " to exit.");
         System.out.println("Please input " + LOGIN + " to login.");
         System.out.println("Please input " + REGISTER + " to register.");
+        System.out.print("Please input your choice here : ");
     }
 
 }

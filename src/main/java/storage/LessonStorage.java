@@ -18,7 +18,7 @@ public class LessonStorage {
 
     public void print(){
         for (int i = 0; i < size; i++) {
-            System.out.println(i + ". " + array[i]);
+            System.out.println("Index " + i + ". " + array[i]);
         }
     }
 
@@ -44,6 +44,15 @@ public class LessonStorage {
             throw new LessonNotFoundException("Lesson with " + index + "doesn't exist.");
         }
         return array[index];
+    }
+
+    public Lesson getLessonByName(String lessonName) {
+        for (int i = 0; i < size; i++) {
+            if (lessonName.equals(array[i].getName())) {
+                return array[i];
+            }
+        }
+        return null;
     }
 
 }
