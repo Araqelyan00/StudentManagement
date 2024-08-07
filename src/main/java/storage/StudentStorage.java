@@ -1,8 +1,8 @@
 package storage;
 
-import exception.LessonNotFoundException;
+
 import lombok.Getter;
-import model.Lesson;
+
 import model.Student;
 
 public class StudentStorage {
@@ -47,5 +47,13 @@ public class StudentStorage {
             System.out.println("Invalid index.");
         }
         return array[index];
+    }
+
+    public void printStudentsByLesson(String lessonName){
+        for (int i = 0 ; i < size; i++) {
+            if (array[i].getLesson().equals(lessonName)) {
+                System.out.println(array[i]);
+            }
+        }
     }
 }

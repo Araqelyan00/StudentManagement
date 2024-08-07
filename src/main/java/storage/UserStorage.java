@@ -1,7 +1,6 @@
 package storage;
 
 import lombok.Getter;
-import model.Student;
 import model.User;
 
 public class UserStorage {
@@ -46,4 +45,15 @@ public class UserStorage {
         }
         return array[index];
     }
+
+    public User getUserByEmail(String email){
+        for (int i = 0; i < size; i++) {
+            if (array[i].getEmail().equals(email)) {
+                return array[i];
+            }
+        }
+        return null;
+    }
+
+
 }
