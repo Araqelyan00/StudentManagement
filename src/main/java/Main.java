@@ -25,6 +25,7 @@ public class Main implements Commands {
         initData();
         boolean run = true;
         while (run) {
+            System.out.println("\n  Main menu");
             Commands.printLoginCommands();
             int command;
             try {
@@ -60,6 +61,7 @@ public class Main implements Commands {
     }
 
     private static void login() {
+        System.out.println("\nLogin form :");
         System.out.print("Please enter your email :");
         String email = sc.nextLine().trim();
         User user = userStorage.getUserByEmail(email);
@@ -82,6 +84,7 @@ public class Main implements Commands {
     }
 
     private static void register() {
+        System.out.println("\nRegistration form :");
         System.out.print("Please enter your name :");
         String name = sc.nextLine().trim();
         System.out.print("Please enter your surname :");
@@ -113,13 +116,14 @@ public class Main implements Commands {
                 System.out.println("Invalid user type !");
             }
             userStorage.add(user);
-            System.out.println("User successfully registered.");
+            System.out.println("\nUser successfully registered.");
         }
     }
 
     private static void loginAdmin() {
         boolean run = true;
         while (run) {
+            System.out.println("\nYou Are Welcome " + currentUser.getName());
             Commands.printAdminCommands();
             int command;
             try {
@@ -163,6 +167,7 @@ public class Main implements Commands {
     private static void loginUser() {
         boolean run = true;
         while (run) {
+            System.out.println("\nYou Are Welcome " + currentUser.getName());
             Commands.printUserCommands();
             int command;
             try {
@@ -194,6 +199,9 @@ public class Main implements Commands {
     }
 
     private static void createAndAddNewStudent() {
+        System.out.println("\nLessons list which you can choose for student :");
+        printAllLessons();
+        System.out.println("\nCreate a new student :");
         System.out.print("Please enter student's name :");
         String name = sc.nextLine().trim();
         System.out.print("Please enter student's surname :");
@@ -207,7 +215,7 @@ public class Main implements Commands {
         System.out.print("Please enter student's lesson :");
         String lessonName = sc.nextLine().trim();
         if (lessonStorage.getLessonByName(lessonName) == null) {
-            System.out.println("Lesson with " + lessonName + " doesn't exists !");
+            System.out.println("\nLesson with " + lessonName + " doesn't exists !");
         } else {
             Lesson lesson = lessonStorage.getLessonByName(lessonName);
 
@@ -224,19 +232,21 @@ public class Main implements Commands {
 
             studentStorage.add(student);
 
-            System.out.println("Student successfully created!");
+            System.out.println("\nStudent successfully created!");
         }
     }
 
     private static void printAllStudents() {
+        System.out.println("\nStudents list :");
         studentStorage.print();
     }
 
     private static void printStudentsByLesson() {
+        System.out.println("\nFilter students by lesson name :");
         System.out.print("Please enter lesson name :");
         String lessonName = sc.nextLine().trim();
         if (lessonStorage.getLessonByName(lessonName) == null) {
-            System.out.println("Lesson with " + lessonName + " doesn't exists !");
+            System.out.println("\nLesson with " + lessonName + " doesn't exists !");
         } else {
 
             studentStorage.printStudentsByLesson(lessonStorage.getLessonByName(lessonName));
@@ -244,7 +254,7 @@ public class Main implements Commands {
     }
 
     private static void printStudentsCount() {
-        System.out.println("We have " + studentStorage.getSize() + " students in the database.");
+        System.out.println("\nWe have " + studentStorage.getSize() + " students in the database.");
     }
 
     private static void printAllLessons() {
@@ -252,7 +262,7 @@ public class Main implements Commands {
     }
 
     private static void deleteStudentByIndex() {
-        System.out.println("Students list :");
+        System.out.println("\nStudents list :");
         printAllStudents();
         System.out.print("Please enter student's index :");
         int studentIndex;
@@ -262,15 +272,15 @@ public class Main implements Commands {
             studentIndex = -1;
         }
         if (studentStorage.getStudentByIndex(studentIndex) == null) {
-            System.out.println("Student doesn't exists !");
+            System.out.println("\nStudent doesn't exists !");
         } else {
             studentStorage.deleteByIndex(studentIndex);
-            System.out.println("Student successfully deleted!");
+            System.out.println("\nStudent successfully deleted!");
         }
     }
 
     private static void changeStudentsLesson() {
-        System.out.println("Students list :");
+        System.out.println("\nStudents list :");
         printAllStudents();
         System.out.print("Please enter student's index :");
         int studentIndex;
@@ -280,9 +290,9 @@ public class Main implements Commands {
             studentIndex = -1;
         }
         if (studentStorage.getStudentByIndex(studentIndex) == null) {
-            System.out.println("Student doesn't exists !");
+            System.out.println("\nStudent doesn't exists !");
         } else {
-            System.out.println("Lessons list :");
+            System.out.println("\nLessons list :");
             lessonStorage.print();
             System.out.println("Please enter lesson index :");
             int lessonIndex;
@@ -293,22 +303,23 @@ public class Main implements Commands {
             }
             try {
                 if (lessonStorage.getLessonByIndex(lessonIndex) == null) {
-                    System.out.println("Lesson doesn't exists !");
+                    System.out.println("\nLesson doesn't exists !");
                 } else {
                     studentStorage.getStudentByIndex(studentIndex).setLesson(lessonStorage.getLessonByIndex(lessonIndex));
-                    System.out.println("Lesson successfully changed!");
+                    System.out.println("\nLesson successfully changed!");
                 }
             } catch (LessonNotFoundException e) {
-                System.out.println("Lesson does not exists !");
+                System.out.println("\nLesson does not exists !");
             }
         }
     }
 
     private static void addLesson(){
+        System.out.println("\nAdding new lesson:");
         System.out.print("Please enter lesson's name :");
         String lessonName = sc.nextLine().trim();
         if (lessonStorage.getLessonByName(lessonName) != null) {
-            System.out.println("Lesson already exists !");
+            System.out.println("\nLesson already exists !");
         } else {
             System.out.print("Please enter teacher's name :");
             String teacherName = sc.nextLine().trim();
@@ -319,7 +330,7 @@ public class Main implements Commands {
             System.out.println("Please enter lesson's start date(dd/MM/yyyy) :");
             String startDateStr = sc.nextLine().trim();
             lessonStorage.add(new Lesson(lessonName, teacherName, durationInMinutes, lessonPrice, stringToDate(startDateStr)));
-            System.out.println("Lesson successfully added!");
+            System.out.println("\nLesson successfully added!");
         }
     }
 
