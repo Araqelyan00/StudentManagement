@@ -8,6 +8,7 @@ import storage.LessonStorage;
 import storage.StudentStorage;
 import storage.UserStorage;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -159,7 +160,11 @@ public class Main implements Commands {
                 case ADD_LESSON:
                     addLesson();
                     break;
-
+                case DOWNLOAD_STUDENT_EXCEL:
+                    downloadStudentExcel();
+                    break;
+                default:
+                    System.out.println("Invalid command !");
             }
         }
     }
@@ -194,6 +199,11 @@ public class Main implements Commands {
                 case PRINT_ALL_LESSONS:
                     printAllLessons();
                     break;
+                case DOWNLOAD_STUDENT_EXCEL:
+                    downloadStudentExcel();
+                    break;
+                default:
+                    System.out.println("Invalid command !");
             }
         }
     }
@@ -334,5 +344,14 @@ public class Main implements Commands {
         }
     }
 
+    private static void downloadStudentExcel(){
+        System.out.print("Please input file directory :");
+        String fileDir = sc.nextLine();
+        try {
+            studentStorage.writeStudentsToExcel(fileDir);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
 
 }

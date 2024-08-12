@@ -11,6 +11,7 @@ public interface Commands {
     int CHANGE_STUDENT_LESSON = 6;
     int DELETE_STUDENT_BY_INDEX = 7;
     int ADD_LESSON = 8;
+    int DOWNLOAD_STUDENT_EXCEL = 9;
 
 
     int EXIT = 0;
@@ -27,6 +28,7 @@ public interface Commands {
         System.out.println("Please input " + CHANGE_STUDENT_LESSON + " to change student's lesson.");
         System.out.println("Please input " + DELETE_STUDENT_BY_INDEX + " to delete a Student by index.");
         System.out.println("Please input " + ADD_LESSON + " to add a lesson.");
+        System.out.println("Please input " + DOWNLOAD_STUDENT_EXCEL + " to download student excel.");
         System.out.print("Please input your choice here : ");
     }
 
@@ -37,6 +39,7 @@ public interface Commands {
         System.out.println("Please input " + PRINT_STUDENTS_BY_LESSON + " to print students by lesson.");
         System.out.println("Please input " + PRINT_STUDENTS_COUNT + " to print students count.");
         System.out.println("Please input " + PRINT_ALL_LESSONS + " to print all lessons.");
+        System.out.println("Please input " + DOWNLOAD_STUDENT_EXCEL + " to download student excel.");
         System.out.print("Please input your choice here : ");
     }
 
